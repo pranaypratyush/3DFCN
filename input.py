@@ -1,6 +1,6 @@
 import glob
 import sys
-import math
+
 import numpy as np
 
 
@@ -121,15 +121,16 @@ def data_generator(batch_size, pc_path, label_path=None, calib_path=None,
     label_file = label_file[start:end]
     calib_file = calib_file[start:end]
 
-    iter_num = math.ceil(len(pc_file) // batch_size)
-
-    while not testing:
+    iter_num = int(len(pc_file) // batch_size) + 1
+    while True:
         for itn in range(iter_num):
             batch_voxel = None
             batch_g_map = None
             batch_g_cord = None
             i = int(itn * batch_size)
             j = int((itn + 1) * batch_size)
+            if j >= len(pc_file): j = -1  # len(pc_file)
+
             for pcs, labels, calibs in zip(pc_file[i:j], label_file[i:j], calib_file[i:j]):
 
                 places = None
